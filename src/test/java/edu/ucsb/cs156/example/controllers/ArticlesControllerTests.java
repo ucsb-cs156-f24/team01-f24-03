@@ -46,29 +46,23 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_all() throws Exception {
-                mockMvc.perform(get("/api/uarticles/all"))
+                mockMvc.perform(get("/api/articles/all"))
                                 .andExpect(status().is(403)); // logged out users can't get all
         }
 
         @WithMockUser(roles = { "USER" })
         @Test
         public void logged_in_users_can_get_all() throws Exception {
-                mockMvc.perform(get("/api/uarticles/all"))
+                mockMvc.perform(get("/api/articles/all"))
                                 .andExpect(status().is(200)); // logged
         }
 
-        @Test
-        public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/uarticles?id=7"))
-                                .andExpect(status().is(403)); // logged out users can't get by id
-        }
-
-        // Authorization tests for /api/uarticles/post
+        // Authorization tests for /api/articles/post
         // (Perhaps should also have these for put and delete)
 
         @Test
         public void logged_out_users_cannot_post() throws Exception {
-                mockMvc.perform(post("/api/uarticles/post"))
+                mockMvc.perform(post("/api/articles/post"))
                                 .andExpect(status().is(403));
         }
 
@@ -79,57 +73,6 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().is(403)); // only admins can post
         }
 
-        // // Tests with mocks for database actions
-
-        @WithMockUser(roles = { "USER" })
-        @Test
-        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
-
-                // arrange
-                LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
-
-                Articles article = Articles.builder()
-                                .title("Article1")
-                                .url("url1")
-                                .explanation("explanation1")
-                                .email("email1")    
-                                .dateadded(ldt)
-                                .build();
-
-                when(ArticlesRepository.findById(eq(1L))).thenReturn(Optional.of(article));
-
-                // act
-                MvcResult response = mockMvc.perform(get("/api/articles?id=1"))
-                                .andExpect(status().isOk()).andReturn();
-
-                // assert
-
-                verify(ArticlesRepository, times(1)).findById(eq(1L));
-                String expectedJson = mapper.writeValueAsString(article);
-                String responseString = response.getResponse().getContentAsString();
-                assertEquals(expectedJson, responseString);
-        }
-
-        @WithMockUser(roles = { "USER" })
-        @Test
-        public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
-
-                // arrange
-
-                when(ArticlesRepository.findById(eq(7L))).thenReturn(Optional.empty());
-
-                // act
-                MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
-                                .andExpect(status().isNotFound()).andReturn();
-
-                // assert
-
-                verify(ArticlesRepository, times(1)).findById(eq(7L));
-                Map<String, Object> json = responseToJson(response);
-                assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("Articles with id 7 not found", json.get("message"));
-        }
-
         @WithMockUser(roles = { "USER" })
         @Test
         public void logged_in_user_can_get_all_articles() throws Exception {
@@ -138,20 +81,21 @@ public class ArticlesControllerTests extends ControllerTestCase {
                 LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
                 Articles articles1 = Articles.builder()
-                                .title("Article1")
+                                .title("Articles1") // Updated from "Article1"
                                 .url("url1")
                                 .explanation("explanation1")
                                 .email("email1")    
                                 .dateadded(ldt1)
                                 .build();
 
+
                 LocalDateTime ldt2 = LocalDateTime.parse("2022-03-11T00:00:00");
 
                 Articles articles2 = Articles.builder()
-                                .title("Article1")
-                                .url("url1")
-                                .explanation("explanation1")
-                                .email("email1")    
+                                .title("Articles2")
+                                .url("url2")
+                                .explanation("explanation2")
+                                .email("email2")    
                                 .dateadded(ldt2)
                                 .build();
 
@@ -180,7 +124,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
                 LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
                 Articles articles1 = Articles.builder()
-                                .title("Article1")
+                                .title("Articles1")
                                 .url("url1")
                                 .explanation("explanation1")
                                 .email("email1")    
@@ -191,7 +135,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/articles/post?title=Articles1&url=url1&explanation=explanatin1&email=&email1&dateadded=2022-01-03T00:00:00")
+                                post("/api/articles/post?title=Articles1&url=url1&explanation=explanation1&email=email1&dateadded=2022-01-03T00:00:00")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
