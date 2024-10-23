@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "ucsbdiningcommonsmenuitems")
-public class UCSBDate {
+@Entity(name = "ucsbdiningcommonsmenuitem")
+public class UCSBDiningCommonsMenuItem {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
