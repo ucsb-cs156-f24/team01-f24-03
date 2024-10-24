@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
@@ -28,7 +29,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 /**
- * This is a REST controller for UCSBDates
+ * This is a REST controller for Articles
  */
 
 @Tag(name = "Articles")
@@ -41,9 +42,9 @@ public class ArticlesController extends ApiController {
     ArticlesRepository ArticlesRepository;
 
     /**
-     * List all UCSB dates
+     * List all Articles
      * 
-     * @return an iterable of UCSBDate
+     * @return an iterable of Articles
      */
     @Operation(summary= "List all articles")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -52,7 +53,23 @@ public class ArticlesController extends ApiController {
         Iterable<Articles> articles = ArticlesRepository.findAll();
         return articles;
     }
+    
+    /**
+     * Get a single date by id
+     * 
+     * @param id the id of the date
+     * @return an Article
+     */
+    @Operation(summary= "Get a single article")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public Articles getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        Articles article = ArticlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
 
+        return article;
+    }
     
     @Operation(summary= "Create a new article")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
