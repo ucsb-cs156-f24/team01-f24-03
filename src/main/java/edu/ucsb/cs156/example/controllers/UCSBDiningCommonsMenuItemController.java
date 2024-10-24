@@ -41,21 +41,34 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
     /**
-     * Get a single date by id
+     * List all UCSB menu items
      * 
-     * @param id the id of the date
+     * @return an iterable of UCSBDiningCommonsMenuItem
+     */
+    @Operation(summary= "List all menu items")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/all")
+    public Iterable<UCSBDiningCommonsMenuItem> allUCSBMenuItems() {
+        Iterable<UCSBDiningCommonsMenuItem> items = ucsbDiningCommonsMenuItemRepository.findAll();
+        return items;
+    }
+
+    /**
+     * Get a single menu item by id
+     * 
+     * @param id the id of the menu item
      * @return a UCSB menu item
      */
-    @Operation(summary= "Get a single menu item")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("")
-    public UCSBDiningCommonsMenuItem getById(
-            @Parameter(name="id") @RequestParam Long id) {
-        UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
+    // @Operation(summary= "Get a single menu item")
+    // @PreAuthorize("hasRole('ROLE_USER')")
+    // @GetMapping("")
+    // public UCSBDiningCommonsMenuItem getById(
+    //         @Parameter(name="id") @RequestParam Long id) {
+    //     UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository.findById(id)
+    //             .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
 
-        return ucsbDiningCommonsMenuItem;
-    }
+    //     return ucsbDiningCommonsMenuItem;
+    // }
 
     /**
      * Create a new menu
