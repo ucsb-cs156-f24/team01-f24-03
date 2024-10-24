@@ -38,7 +38,7 @@ import java.time.LocalDateTime;
 public class UCSBDiningCommonsMenuItemController extends ApiController {
 
     @Autowired
-    UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemeRepository;
+    UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
     /**
      * Get a single date by id
@@ -71,7 +71,7 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     public UCSBDiningCommonsMenuItem postUCSBDiningCommonsMenuItem(
             @Parameter(name="diningCommonsCode") @RequestParam String diningCommonsCode,
             @Parameter(name="name") @RequestParam String name,
-            @Parameter(name="station"), @RequestParam String station,)
+            @Parameter(name="station") @RequestParam String station)
             throws JsonProcessingException {
 
         // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -80,9 +80,9 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
         // log.info("localDateTime={}", localDateTime);
 
         UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = new UCSBDiningCommonsMenuItem();
-        ucsbDate.setDiningCommonsCode(diningCommonsCode);
-        ucsbDate.setName(name);
-        ucsbDate.setStation(station);
+        ucsbDiningCommonsMenuItem.setDiningCommonsCode(diningCommonsCode);
+        ucsbDiningCommonsMenuItem.setName(name);
+        ucsbDiningCommonsMenuItem.setStation(station);
 
         UCSBDiningCommonsMenuItem savedUCSBDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository.save(ucsbDiningCommonsMenuItem);
 
