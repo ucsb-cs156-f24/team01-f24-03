@@ -27,7 +27,7 @@
                                         "autoIncrement": true,
                                         "constraints": {
                                             "primaryKey": true,
-                                            "primaryKeyName": "HELPREQUEST_PK"
+                                            "primaryKeyName": "HELP_REQUEST_PK"
                                         },
                                         "name": "ID",
                                         "type": "BIGINT"
