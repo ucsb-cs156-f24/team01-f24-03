@@ -1,0 +1,74 @@
+{
+    "databaseChangeLog": [
+      {
+        "changeSet": {
+          "id": "RecommendationRequest-1",
+          "author": "pballani",
+          "preConditions": [
+            {
+              "onFail": "MARK_RAN"
+            },
+            {
+              "not": [
+                {
+                  "tableExists": {
+                    "tableName": "recommendationrequests"
+                  }
+                }
+              ]
+            }
+          ],
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "autoIncrement": true,
+                      "constraints": {
+                        "primaryKey": true,
+                        "primaryKeyName": "RECOMMENDATION_REQUEST_PK"
+                      },
+                      "name": "ID",
+                      "type": "BIGINT"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "REQUESTER_EMAIL",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "PROFESSOR_EMAIL",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "EXPLANATION",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "DATE_REQUESTED",
+                      "type": "LOCAL_DATE_TIME"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "DATE_NEEDED",
+                      "type": "LOCAL_DATE_TIME"
+                    }
+                  }
+                ],
+                "tableName": "recommendationrequests"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
