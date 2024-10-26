@@ -87,11 +87,6 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
             @Parameter(name="station") @RequestParam String station)
             throws JsonProcessingException {
 
-        // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        // See: https://www.baeldung.com/spring-date-parameters
-
-        // log.info("localDateTime={}", localDateTime);
-
         UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = new UCSBDiningCommonsMenuItem();
         ucsbDiningCommonsMenuItem.setDiningCommonsCode(diningCommonsCode);
         ucsbDiningCommonsMenuItem.setName(name);

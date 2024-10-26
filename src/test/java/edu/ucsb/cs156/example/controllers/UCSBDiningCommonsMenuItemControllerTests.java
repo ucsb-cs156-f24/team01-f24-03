@@ -133,15 +133,11 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
         public void logged_in_user_can_get_all_ucsbmenuitems() throws Exception {
 
                 // arrange
-                // LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
-
                 UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem1 = UCSBDiningCommonsMenuItem.builder()
                                 .diningCommonsCode("ortega")
                                 .name("salad")
                                 .station("entrees")
                                 .build();
-
-                // LocalDateTime ldt2 = LocalDateTime.parse("2022-03-11T00:00:00");
 
                 UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem2 = UCSBDiningCommonsMenuItem.builder()
                                 .diningCommonsCode("dlg")
@@ -169,10 +165,8 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void an_admin_user_can_post_a_new_ucsbmenuitem() throws Exception {
+                
                 // arrange
-
-                // LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
-
                 UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem1 = UCSBDiningCommonsMenuItem.builder()
                                 .diningCommonsCode("ortega")
                                 .name("salad")
