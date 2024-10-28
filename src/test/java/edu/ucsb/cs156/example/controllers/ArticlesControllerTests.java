@@ -5,7 +5,6 @@ import edu.ucsb.cs156.example.testconfig.TestConfig;
 import edu.ucsb.cs156.example.ControllerTestCase;
 import edu.ucsb.cs156.example.entities.Articles;
 import edu.ucsb.cs156.example.entities.UCSBDate;
-import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/articles?id=1"))
+                mockMvc.perform(get("/api/articles?id=7"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 
@@ -81,8 +80,6 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().is(403)); // only admins can post
         }
 
-        // Tests with mocks for database actions
-
         @WithMockUser(roles = { "USER" })
         @Test
         public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
@@ -90,24 +87,24 @@ public class ArticlesControllerTests extends ControllerTestCase {
                 // arrange
                 LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
 
-                Articles article = Articles.builder()
-                                .title("Articles1") // Updated from "Article1"
-                                .url("url1")
-                                .explanation("explanation1")
-                                .email("email1")    
-                                .dateadded(ldt)
-                                .build();
+                Articles articles = Articles.builder()
+                            .title("Articles2")
+                            .url("url2")
+                            .explanation("explanation2")
+                            .email("email2")    
+                            .dateadded(ldt)
+                            .build();
 
-                when(ArticlesRepository.findById(eq(1L))).thenReturn(Optional.of(article));
+                when(ArticlesRepository.findById(eq(7L))).thenReturn(Optional.of(articles));
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/articles?id=1"))
+                MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
 
-                verify(ArticlesRepository, times(1)).findById(eq(1L));
-                String expectedJson = mapper.writeValueAsString(article);
+                verify(ArticlesRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(articles);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -118,18 +115,18 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
                 // arrange
 
-                when(ArticlesRepository.findById(eq(1L))).thenReturn(Optional.empty());
+                when(ArticlesRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/articles?id=1"))
+                MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
 
-                verify(ArticlesRepository, times(1)).findById(eq(1L));
+                verify(ArticlesRepository, times(1)).findById(eq(7L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("Articles with id 1 not found", json.get("message"));
+                assertEquals("Articles with id 7 not found", json.get("message"));
         }
 
 
