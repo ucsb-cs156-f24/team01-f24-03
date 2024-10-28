@@ -1,7 +1,6 @@
 package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.Articles;
-import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
@@ -30,6 +29,7 @@ import java.time.LocalDateTime;
 
 /**
  * This is a REST controller for Articles
+ * This is a REST controller for Articles
  */
 
 @Tag(name = "Articles")
@@ -43,7 +43,9 @@ public class ArticlesController extends ApiController {
 
     /**
      * List all Articles
+     * List all Articles
      * 
+     * @return an iterable of Articles
      * @return an iterable of Articles
      */
     @Operation(summary= "List all articles")
@@ -53,6 +55,7 @@ public class ArticlesController extends ApiController {
         Iterable<Articles> articles = ArticlesRepository.findAll();
         return articles;
     }
+    
     
     /**
      * Get a single date by id
@@ -98,6 +101,25 @@ public class ArticlesController extends ApiController {
 
         return savedArticles;
     }
+
+    /**
+     * Delete a Articles
+     * 
+     * @param id the id of the date to delete
+     * @return a message indicating the date was deleted
+     */
+    @Operation(summary= "Delete an Article")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("")
+    public Object deleteArticle(
+            @Parameter(name="id") @RequestParam Long id) {
+        Articles article = ArticlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
+        ArticlesRepository.delete(article);
+        return genericMessage("Articles with id %s deleted".formatted(id));
+    }
+
     /**
      * Update a single article
      * 
