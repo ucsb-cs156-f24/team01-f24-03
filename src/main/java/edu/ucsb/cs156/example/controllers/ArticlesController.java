@@ -2,6 +2,7 @@ package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.Articles;
 import edu.ucsb.cs156.example.entities.UCSBDate;
+import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 
 /**
  * This is a REST controller for Articles
+ * This is a REST controller for Articles
  */
 
 @Tag(name = "Articles")
@@ -43,7 +45,9 @@ public class ArticlesController extends ApiController {
 
     /**
      * List all Articles
+     * List all Articles
      * 
+     * @return an iterable of Articles
      * @return an iterable of Articles
      */
     @Operation(summary= "List all articles")
@@ -52,6 +56,23 @@ public class ArticlesController extends ApiController {
     public Iterable<Articles> allArticles() {
         Iterable<Articles> articles = ArticlesRepository.findAll();
         return articles;
+    }
+    
+    /**
+     * Get a single date by id
+     * 
+     * @param id the id of the date
+     * @return an Article
+     */
+    @Operation(summary= "Get a single article")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public Articles getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        Articles article = ArticlesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
+        return article;
     }
     
     /**
