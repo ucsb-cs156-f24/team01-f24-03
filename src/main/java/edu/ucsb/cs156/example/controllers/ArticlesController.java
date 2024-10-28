@@ -1,8 +1,6 @@
 package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.Articles;
-import edu.ucsb.cs156.example.entities.UCSBDate;
-import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 
@@ -58,22 +56,6 @@ public class ArticlesController extends ApiController {
         return articles;
     }
     
-    /**
-     * Get a single date by id
-     * 
-     * @param id the id of the date
-     * @return an Article
-     */
-    @Operation(summary= "Get a single article")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("")
-    public Articles getById(
-            @Parameter(name="id") @RequestParam Long id) {
-        Articles article = ArticlesRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
-
-        return article;
-    }
     
     /**
      * Get a single date by id
