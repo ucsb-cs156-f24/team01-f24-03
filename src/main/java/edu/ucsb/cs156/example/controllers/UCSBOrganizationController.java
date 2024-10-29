@@ -33,10 +33,10 @@ public class UCSBOrganizationController extends ApiController {
     UCSBOrganizationRepository ucsbOrganizationRepository;
 
 
-    @Operation(summary= "List all ucsb organizations")
+    @Operation(summary= "List all UCSB organizations")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<UCSBOrganization> allOrganizations() {
+    public Iterable<UCSBOrganization> allOrganization() {
         Iterable<UCSBOrganization> commons = ucsbOrganizationRepository.findAll();
         return commons;
     }
@@ -44,7 +44,7 @@ public class UCSBOrganizationController extends ApiController {
     @Operation(summary= "Create a new organization")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
-    public UCSBOrganization postOrganizations(
+    public UCSBOrganization postOrganization(
         @Parameter(name="orgCode") @RequestParam String orgCode,
         @Parameter(name="orgTranslationShort") @RequestParam String orgTranslationShort,
         @Parameter(name="orgTranslation") @RequestParam String orgTranslation,
