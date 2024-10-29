@@ -1,8 +1,8 @@
 package edu.ucsb.cs156.example.controllers;
 
-import edu.ucsb.cs156.example.entities.UCSBOrganizations;
+import edu.ucsb.cs156.example.entities.UCSBOrganization;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
-import edu.ucsb.cs156.example.repositories.UCSBOrganizationsRepository;
+import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,28 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 
-@Tag(name = "UCSBOrganizations")
-@RequestMapping("/api/ucsborganizations")
+@Tag(name = "UCSBOrganization")
+@RequestMapping("/api/ucsborganization")
 @RestController
 @Slf4j
-public class UCSBOrganizationsController extends ApiController {
+public class UCSBOrganizationController extends ApiController {
 
     @Autowired
-    UCSBOrganizationsRepository ucsbOrganizationsRepository;
+    UCSBOrganizationRepository ucsbOrganizationRepository;
 
 
     @Operation(summary= "List all ucsb organizations")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<UCSBOrganizations> allOrganizations() {
-        Iterable<UCSBOrganizations> commons = ucsbOrganizationsRepository.findAll();
+    public Iterable<UCSBOrganization> allOrganizations() {
+        Iterable<UCSBOrganization> commons = ucsbOrganizationRepository.findAll();
         return commons;
     }
 
     @Operation(summary= "Create a new organization")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
-    public UCSBOrganizations postOrganizations(
+    public UCSBOrganization postOrganizations(
         @Parameter(name="orgCode") @RequestParam String orgCode,
         @Parameter(name="orgTranslationShort") @RequestParam String orgTranslationShort,
         @Parameter(name="orgTranslation") @RequestParam String orgTranslation,
@@ -52,13 +52,13 @@ public class UCSBOrganizationsController extends ApiController {
         )
         {
 
-        UCSBOrganizations organization = new UCSBOrganizations();
+        UCSBOrganization organization = new UCSBOrganization();
         organization.setOrgCode(orgCode);
         organization.setOrgTranslationShort(orgTranslationShort);
         organization.setOrgTranslation(orgTranslation);
         organization.setInactive(inactive);
 
-        UCSBOrganizations savedOrganization = ucsbOrganizationsRepository.save(organization);
+        UCSBOrganization savedOrganization = ucsbOrganizationRepository.save(organization);
 
         return savedOrganization;
     }
