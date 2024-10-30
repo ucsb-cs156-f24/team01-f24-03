@@ -109,7 +109,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
 
                 // assert
 
-                verify(helpRequestsRepository, times(1)).findById(eq(7L));
+                verify(helpRequestRepository, times(1)).findById(eq(7L));
                 String expectedJson = mapper.writeValueAsString(helpRequest);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -149,7 +149,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                                 .requesterEmail("bsaiju@ucsb.edu")
                                 .teamId("03")
                                 .tableOrBreakoutRoom("table")
-                                .requestTime(ldt)
+                                .requestTime(ldt1)
                                 .explanation("dokku")
                                 .solved(false)
                                 .build();
@@ -160,7 +160,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                                 .requesterEmail("random@email.bro")
                                 .teamId("02")
                                 .tableOrBreakoutRoom("breakout")
-                                .requestTime(ldt)
+                                .requestTime(ldt2)
                                 .explanation("jacoco")
                                 .solved(true)
                                 .build();
@@ -271,44 +271,87 @@ public class HelpRequestControllerTests extends ControllerTestCase {
         }
 
 
-        // @WithMockUser(roles = { "ADMIN", "USER" })
-        // @Test
-        // public void admin_can_edit_an_existing_helprequest() throws Exception {
-        //         // arrange
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_can_edit_an_existing_helprequest() throws Exception {
+                // arrange
 
-        //         LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
-        //         LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
+                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+                LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
 
-        //         UCSBDate ucsbDateOrig = UCSBDate.builder()
-        //                         .name("firstDayOfClasses")
-        //                         .quarterYYYYQ("20222")
-        //                         .localDateTime(ldt1)
-        //                         .build();
+                 HelpRequest helpRequestOrig = HelpRequest.builder()
+                                .requesterEmail("random@email.bro")
+                                .teamId("007")
+                                .tableOrBreakoutRoom("table")
+                                .requestTime(ldt1)
+                                .explanation("fufufu")
+                                .solved(true)
+                                .build();
 
-        //         UCSBDate ucsbDateEdited = UCSBDate.builder()
-        //                         .name("firstDayOfFestivus")
-        //                         .quarterYYYYQ("20232")
-        //                         .localDateTime(ldt2)
-        //                         .build();
+                 HelpRequest helpRequestEdited = HelpRequest.builder()
+                                .requesterEmail("new_random@email.bro")
+                                .teamId("001")
+                                .tableOrBreakoutRoom("breakout")
+                                .requestTime(ldt2)
+                                .explanation("hahaha")
+                                .solved(false)
+                                .build();
 
-        //         String requestBody = mapper.writeValueAsString(ucsbDateEdited);
+                String requestBody = mapper.writeValueAsString(helpRequestEdited);
 
-        //         when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.of(ucsbDateOrig));
+                when(helpRequestRepository.findById(eq(67L))).thenReturn(Optional.of(helpRequestOrig));
 
-        //         // act
-        //         MvcResult response = mockMvc.perform(
-        //                         put("/api/ucsbdates?id=67")
-        //                                         .contentType(MediaType.APPLICATION_JSON)
-        //                                         .characterEncoding("utf-8")
-        //                                         .content(requestBody)
-        //                                         .with(csrf()))
-        //                         .andExpect(status().isOk()).andReturn();
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/helprequests?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
 
-        //         // assert
-        //         verify(ucsbDateRepository, times(1)).findById(67L);
-        //         verify(ucsbDateRepository, times(1)).save(ucsbDateEdited); // should be saved with correct user
-        //         String responseString = response.getResponse().getContentAsString();
-        //         assertEquals(requestBody, responseString);
-        // }
+                // assert
+                verify(helpRequestRepository, times(1)).findById(67L);
+                verify(helpRequestRepository, times(1)).save(helpRequestEdited); // should be saved with correct user
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_cannot_edit_ucsbdate_that_does_not_exist() throws Exception {
+                // arrange
+
+                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+                HelpRequest helpRequestEdited = HelpRequest.builder()
+                                .requesterEmail("new_random@email.bro")
+                                .teamId("001")
+                                .tableOrBreakoutRoom("breakout")
+                                .requestTime(ldt1)
+                                .explanation("hahaha")
+                                .solved(false)
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(helpRequestEdited);
+
+                when(helpRequestRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/helprequests?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(helpRequestRepository, times(1)).findById(67L);
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("HelpRequest with id 67 not found", json.get("message"));
+
+        }
 
 }
