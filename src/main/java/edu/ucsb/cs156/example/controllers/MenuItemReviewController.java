@@ -114,12 +114,40 @@ public class MenuItemReviewController extends ApiController {
     @Operation(summary= "Delete a MenuReviewItem")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
-    public Object deleteUCSBDate(
+    public Object deleteMenuItemReview(
             @Parameter(name="id") @RequestParam Long id) {
         MenuItemReview review = menuItemReviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
 
         menuItemReviewRepository.delete(review);
         return genericMessage("MenuItemReview with id %s deleted".formatted(id));
+    }
+
+    /**
+     * Update a single review
+     * 
+     * @param id       id of the review to update
+     * @param incoming the new review
+     * @return the updated review object
+     */
+    @Operation(summary= "Update a single review")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public MenuItemReview updateMenuItemReview(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid MenuItemReview incoming) {
+
+        MenuItemReview review = menuItemReviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
+
+        review.setItemid(incoming.getItemid());
+        review.setRevieweremail(incoming.getRevieweremail());
+        review.setStars(incoming.getStars());
+        review.setDatereviewed(incoming.getDatereviewed());
+        review.setComments(incoming.getComments());
+
+        menuItemReviewRepository.save(review);
+
+        return review;
     }
 }

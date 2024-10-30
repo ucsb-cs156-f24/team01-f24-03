@@ -254,4 +254,86 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("MenuItemReview with id 15 not found", json.get("message"));
         }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_can_edit_an_existing_menuitemreview() throws Exception {
+                // arrange
+
+                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+                LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
+
+               
+              
+                MenuItemReview reviewOrig = MenuItemReview.builder()
+                                .itemid(9L)
+                                .revieweremail("sameerrao@ucsb.edu")
+                                .stars(5)
+                                .datereviewed(ldt1)
+                                .comments("good")
+                                .build();
+
+
+                MenuItemReview reviewEdit = MenuItemReview.builder()
+                                .itemid(8L)
+                                .revieweremail("test@ucsb.edu")
+                                .stars(0)
+                                .datereviewed(ldt2)
+                                .comments("bad")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(reviewEdit);
+
+                when(menuItemReviewRepository.findById(eq(67L))).thenReturn(Optional.of(reviewOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/menuitemreview?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(menuItemReviewRepository, times(1)).findById(67L);
+                verify(menuItemReviewRepository, times(1)).save(reviewEdit); // should be saved with correct user
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_cannot_edit_review_that_does_not_exist() throws Exception {
+                // arrange
+                LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+              
+                MenuItemReview review1 = MenuItemReview.builder()
+                                .itemid(1L)
+                                .revieweremail("sameerrao@ucsb.edu")
+                                .stars(5)
+                                .datereviewed(ldt1)
+                                .comments("good")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(review1);
+
+                when(menuItemReviewRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/menuitemreview?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(menuItemReviewRepository, times(1)).findById(67L);
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("MenuItemReview with id 67 not found", json.get("message"));
+
+        }
 }
