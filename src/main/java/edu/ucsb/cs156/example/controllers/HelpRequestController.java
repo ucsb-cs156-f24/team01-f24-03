@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
  * This is a REST controller for HelpRequests
  */
 
-@Tag(name = "HelpRequests")
+@Tag(name = "helprequests")
 @RequestMapping("/api/helprequests")
 @RestController
 @Slf4j
