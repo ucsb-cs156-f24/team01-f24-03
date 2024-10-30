@@ -104,5 +104,51 @@ import java.time.LocalDateTime;
 
 <span class="fc" id="L105">        return review;</span>
     }
+    
+    /**
+     * Delete a UCSBDate
+     * 
+     * @param id the id of the date to delete
+     * @return a message indicating the date was deleted
+     */
+    @Operation(summary= &quot;Delete a MenuReviewItem&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteMenuItemReview(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L119">        MenuItemReview review = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L120">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L122">        menuItemReviewRepository.delete(review);</span>
+<span class="fc" id="L123">        return genericMessage(&quot;MenuItemReview with id %s deleted&quot;.formatted(id));</span>
+    }
+
+    /**
+     * Update a single review
+     * 
+     * @param id       id of the review to update
+     * @param incoming the new review
+     * @return the updated review object
+     */
+    @Operation(summary= &quot;Update a single review&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+    public MenuItemReview updateMenuItemReview(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id,
+            @RequestBody @Valid MenuItemReview incoming) {
+
+<span class="fc" id="L140">        MenuItemReview review = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L141">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L143">        review.setItemid(incoming.getItemid());</span>
+<span class="fc" id="L144">        review.setRevieweremail(incoming.getRevieweremail());</span>
+<span class="fc" id="L145">        review.setStars(incoming.getStars());</span>
+<span class="fc" id="L146">        review.setDatereviewed(incoming.getDatereviewed());</span>
+<span class="fc" id="L147">        review.setComments(incoming.getComments());</span>
+
+<span class="fc" id="L149">        menuItemReviewRepository.save(review);</span>
+
+<span class="fc" id="L151">        return review;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
