@@ -35,18 +35,16 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/recommendationrequests")
 @RestController
 @Slf4j
-
 public class RecommendationRequestController extends ApiController {
-
+    
     @Autowired
-
+    RecommendationRequestRepository recommendationRequestRepository;
+    
     /**
      * List all Recommendation Requests
      * 
      * @return an iterable of Recommendation Request
      */
-    RecommendationRequestRepository recommendationRequestRepository;
-
     @Operation(summary= "List all recommendation requests")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
@@ -135,8 +133,7 @@ public class RecommendationRequestController extends ApiController {
      * @param incoming the request date
      * @return the updated request object
      */
-
-     @Operation(summary= "Update a single request")
+    @Operation(summary= "Update a single request")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
     public RecommendationRequest updateRecommendationRequest(
