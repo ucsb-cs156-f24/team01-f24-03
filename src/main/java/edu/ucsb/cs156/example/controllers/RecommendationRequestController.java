@@ -61,7 +61,7 @@ public class RecommendationRequestController extends ApiController {
      * @param id the id of the recommendation request
      * @return a RecommendationRequest
      */
- @Operation(summary= "Get a single date")
+    @Operation(summary= "Get a single date")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
     public RecommendationRequest getById(
@@ -75,15 +75,14 @@ public class RecommendationRequestController extends ApiController {
     /**
      * Create a new recommendation request
      * 
-     * @param requesterEmail  the quarter in the format YYYYQ
-     * @param professorEmail          the name of the date
-     * @param explanation the date
-     * @param dateRequested
-     * @param dateNeeded
-     * @param done
+     * @param requesterEmail  email of the requester
+     * @param professorEmail  email of the professor
+     * @param explanation     explanation
+     * @param dateRequested   date requested
+     * @param dateNeeded      date needed
+     * @param done            completed or no 
      * @return the saved recommendationRequest
      */
-
     @Operation(summary= "Create a new recommendation request")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
@@ -117,7 +116,7 @@ public class RecommendationRequestController extends ApiController {
      * @param id the id of the request to delete
      * @return a message indicating the request was deleted
      */
-   @Operation(summary= "Delete a RecommendationRequest")
+    @Operation(summary= "Delete a RecommendationRequest")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
     public Object deleteRecommendationRequest(
