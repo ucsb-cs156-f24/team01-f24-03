@@ -61,7 +61,7 @@ import java.time.LocalDateTime;
      * @param id the id of the recommendation request
      * @return a RecommendationRequest
      */
- @Operation(summary= &quot;Get a single date&quot;)
+    @Operation(summary= &quot;Get a single date&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;&quot;)
     public RecommendationRequest getById(
@@ -75,15 +75,14 @@ import java.time.LocalDateTime;
     /**
      * Create a new recommendation request
      * 
-     * @param requesterEmail  the quarter in the format YYYYQ
-     * @param professorEmail          the name of the date
-     * @param explanation the date
-     * @param dateRequested
-     * @param dateNeeded
-     * @param done
+     * @param requesterEmail  email of the requester
+     * @param professorEmail  email of the professor
+     * @param explanation     explanation
+     * @param dateRequested   date requested
+     * @param dateNeeded      date needed
+     * @param done            completed or no 
      * @return the saved recommendationRequest
      */
-
     @Operation(summary= &quot;Create a new recommendation request&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @PostMapping(&quot;/post&quot;)
@@ -97,18 +96,18 @@ import java.time.LocalDateTime;
             
             throws JsonProcessingException {
 
-<span class="fc" id="L100">          RecommendationRequest recommendationRequest = RecommendationRequest.builder()</span>
-<span class="fc" id="L101">            .requesterEmail(requesterEmail)</span>
-<span class="fc" id="L102">            .professorEmail(professorEmail)</span>
-<span class="fc" id="L103">            .explanation(explanation)</span>
-<span class="fc" id="L104">            .dateRequested(dateRequested)</span>
-<span class="fc" id="L105">            .dateNeeded(dateNeeded)</span>
-<span class="fc" id="L106">            .done(done)</span>
-<span class="fc" id="L107">            .build();</span>
+<span class="fc" id="L99">          RecommendationRequest recommendationRequest = RecommendationRequest.builder()</span>
+<span class="fc" id="L100">            .requesterEmail(requesterEmail)</span>
+<span class="fc" id="L101">            .professorEmail(professorEmail)</span>
+<span class="fc" id="L102">            .explanation(explanation)</span>
+<span class="fc" id="L103">            .dateRequested(dateRequested)</span>
+<span class="fc" id="L104">            .dateNeeded(dateNeeded)</span>
+<span class="fc" id="L105">            .done(done)</span>
+<span class="fc" id="L106">            .build();</span>
         
-<span class="fc" id="L109">        RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);</span>
+<span class="fc" id="L108">        RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);</span>
 
-<span class="fc" id="L111">        return savedRecommendationRequest;</span>
+<span class="fc" id="L110">        return savedRecommendationRequest;</span>
     }
 
     /**
@@ -117,16 +116,16 @@ import java.time.LocalDateTime;
      * @param id the id of the request to delete
      * @return a message indicating the request was deleted
      */
-   @Operation(summary= &quot;Delete a RecommendationRequest&quot;)
+    @Operation(summary= &quot;Delete a RecommendationRequest&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
     @DeleteMapping(&quot;&quot;)
     public Object deleteRecommendationRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L125">        RecommendationRequest request = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L126">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L124">        RecommendationRequest request = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L125">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L128">        recommendationRequestRepository.delete(request);</span>
-<span class="fc" id="L129">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L127">        recommendationRequestRepository.delete(request);</span>
+<span class="fc" id="L128">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
     }
 
         /**
@@ -144,19 +143,19 @@ import java.time.LocalDateTime;
             @Parameter(name=&quot;id&quot;) @RequestParam Long id,
             @RequestBody @Valid RecommendationRequest incoming) {
 
-<span class="fc" id="L147">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L148">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L146">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L147">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L150">        recommendationRequest.setRequesterEmail(incoming.getRequesterEmail());</span>
-<span class="fc" id="L151">        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());</span>
-<span class="fc" id="L152">        recommendationRequest.setExplanation(incoming.getExplanation());</span>
-<span class="fc" id="L153">        recommendationRequest.setDateRequested(incoming.getDateRequested());</span>
-<span class="fc" id="L154">        recommendationRequest.setDateNeeded(incoming.getDateNeeded());</span>
-<span class="fc" id="L155">        recommendationRequest.setDone(incoming.getDone());</span>
+<span class="fc" id="L149">        recommendationRequest.setRequesterEmail(incoming.getRequesterEmail());</span>
+<span class="fc" id="L150">        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());</span>
+<span class="fc" id="L151">        recommendationRequest.setExplanation(incoming.getExplanation());</span>
+<span class="fc" id="L152">        recommendationRequest.setDateRequested(incoming.getDateRequested());</span>
+<span class="fc" id="L153">        recommendationRequest.setDateNeeded(incoming.getDateNeeded());</span>
+<span class="fc" id="L154">        recommendationRequest.setDone(incoming.getDone());</span>
 
-<span class="fc" id="L157">        recommendationRequestRepository.save(recommendationRequest);</span>
+<span class="fc" id="L156">        recommendationRequestRepository.save(recommendationRequest);</span>
 
-<span class="fc" id="L159">        return recommendationRequest;</span>
+<span class="fc" id="L158">        return recommendationRequest;</span>
     }
 }
 
