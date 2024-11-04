@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * This is a JPA entity that represents a RecomendationRequest.
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +30,5 @@ public class RecommendationRequest {
   private String explanation;
   private LocalDateTime dateRequested;
   private LocalDateTime dateNeeded;
-  boolean done; 
+  private boolean done; 
 }

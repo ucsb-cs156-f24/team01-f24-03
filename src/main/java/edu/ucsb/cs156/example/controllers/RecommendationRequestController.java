@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 /**
  * This is a REST controller for RecommendationRequests
  */
+
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/recommendationrequests")
 @RestController
@@ -91,10 +92,8 @@ public class RecommendationRequestController extends ApiController {
             @Parameter(name="dateRequested", description="date (in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)") @RequestParam("dateRequested") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateRequested,
             @Parameter(name="dateNeeded", description="date (in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)") @RequestParam("dateNeeded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateNeeded,
             @Parameter(name="done") @RequestParam boolean done)
-            
             throws JsonProcessingException {
-
-          RecommendationRequest recommendationRequest = RecommendationRequest.builder()
+        RecommendationRequest recommendationRequest = RecommendationRequest.builder()
             .requesterEmail(requesterEmail)
             .professorEmail(professorEmail)
             .explanation(explanation)
