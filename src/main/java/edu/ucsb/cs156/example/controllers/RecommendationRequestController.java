@@ -27,6 +27,10 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
 
+
+/**
+ * This is a REST controller for RecommendationRequests
+ */
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/recommendationrequests")
 @RestController
@@ -35,13 +39,14 @@ import java.time.LocalDateTime;
 public class RecommendationRequestController extends ApiController {
 
     @Autowired
-    RecommendationRequestRepository recommendationRequestRepository;
 
     /**
-     * List all UCSB dates
+     * List all Recommendation Requests
      * 
-     * @return an iterable of UCSBDate
+     * @return an iterable of Recommendation Request
      */
+    RecommendationRequestRepository recommendationRequestRepository;
+
     @Operation(summary= "List all recommendation requests")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
@@ -50,6 +55,12 @@ public class RecommendationRequestController extends ApiController {
         return requests;
     }
 
+    /**
+     * Get a single recommendation request by id
+     * 
+     * @param id the id of the recommendation request
+     * @return a RecommendationRequest
+     */
  @Operation(summary= "Get a single date")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
@@ -61,6 +72,17 @@ public class RecommendationRequestController extends ApiController {
         return recommendationRequest;
     }
 
+    /**
+     * Create a new recommendation request
+     * 
+     * @param requesterEmail  the quarter in the format YYYYQ
+     * @param professorEmail          the name of the date
+     * @param explanation the date
+     * @param dateRequested
+     * @param dateNeeded
+     * @param done
+     * @return the saved recommendationRequest
+     */
 
     @Operation(summary= "Create a new recommendation request")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -89,6 +111,12 @@ public class RecommendationRequestController extends ApiController {
         return savedRecommendationRequest;
     }
 
+    /**
+     * Delete a RecommendationRequest
+     * 
+     * @param id the id of the request to delete
+     * @return a message indicating the request was deleted
+     */
    @Operation(summary= "Delete a RecommendationRequest")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
@@ -100,6 +128,14 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequestRepository.delete(request);
         return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
     }
+
+        /**
+     * Update a single date
+     * 
+     * @param id       id of the request to update
+     * @param incoming the request date
+     * @return the updated request object
+     */
 
      @Operation(summary= "Update a single request")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
