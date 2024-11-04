@@ -32,7 +32,10 @@ public class UCSBOrganizationController extends ApiController {
     @Autowired
     UCSBOrganizationRepository ucsbOrganizationRepository;
 
-
+    /**
+     * This method returns a list of all ucsborganizations.
+     * @return a list of all ucsborganizations
+     */
     @Operation(summary= "List all UCSB organizations")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
@@ -43,7 +46,7 @@ public class UCSBOrganizationController extends ApiController {
 
     /**
      * This method returns a single organization.
-     * @param code code of the organization
+     * @param orgcode code of the organization
      * @return a single organization
      */
     @Operation(summary= "Get a single organization")
@@ -57,7 +60,14 @@ public class UCSBOrganizationController extends ApiController {
         return commons;
     }
 
-    //create organization
+     /**
+     * This method creates a new organization. Accessible only to users with the role "ROLE_ADMIN".
+     * @param orgcode orgcode of the organization
+     * @param orgTranslationShort short name of the organization
+     * @param orgTranslation name of the organization
+     * @param inactive whether the organization is active or not
+     * @return the save organization
+     */
     @Operation(summary= "Create a new organization")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
